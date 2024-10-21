@@ -77,7 +77,7 @@ void add_palavra(){
     fprintf(f, "%d", qnt);
 
     fseek(f, 0, SEEK_END);
-    printf("Nova palavra: ");
+    printf("Nova palavra (EM MAIÚSCULO): ");
     scanf("%s", nova_palavra);
     fprintf(f, "\n%s", nova_palavra);
 
