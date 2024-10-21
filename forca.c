@@ -1,19 +1,22 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <time.h>
 
 void abertura();
-int get_chute(char *max_chutes, int tentativas);
-bool achou_letra(char letra, int tentativas, char *max_chutes);
 void forca(char *palavra, int tentativas, char *max_chutes);
+bool achou_letra(char letra, int tentativas, char *max_chutes);
 bool enforcou(int tentativas, char *max_chutes, char *palavra);
 bool acertou(char *palavra, int tentativas, char *max_chutes);
+int get_chute(char *max_chutes, int tentativas);
+char *sortea_palavra(char *palavra);
 
 int main(){
-    char palavra[20], max_chutes[26];
+    char palavra[50], max_chutes[26];
     int tentativas = 0;
 
-    sprintf(palavra, "CONTRATO");
+    sortea_palavra(palavra);
 
     abertura();
 
@@ -40,15 +43,15 @@ void abertura(){
     printf("*   Jogo da Forca   *\n");
     printf("*********************\n");
 }
-int get_chute(char *max_chutes, int tentativas){
-    char chute;
-    
-    printf("De o seu chute: ");
-    scanf("%c", &chute);
-    getchar();
-    max_chutes[tentativas] = chute;
-    tentativas++;
-    return tentativas;
+void forca(char *palavra, int tentativas, char *max_chutes){
+    printf("\nTentativa %d!\n", tentativas);
+    for(int i = 0; i < strlen(palavra); i++){
+        if(achou_letra(palavra[i], tentativas, max_chutes)){
+            printf("%c ", palavra[i]);
+        }else{
+            printf("_ ");
+        }
+    }
 }
 bool achou_letra(char letra, int tentativas, char *max_chutes){
     bool achou = false;
@@ -59,16 +62,6 @@ bool achou_letra(char letra, int tentativas, char *max_chutes){
         }
     }
     return achou;
-}
-void forca(char *palavra, int tentativas, char *max_chutes){
-    printf("\nTentativa %d!\n", tentativas);
-    for(int i = 0; i < strlen(palavra); i++){
-        if(achou_letra(palavra[i], tentativas, max_chutes)){
-            printf("%c ", palavra[i]);
-        }else{
-            printf("_ ");
-        }
-    }
 }
 bool enforcou(int tentativas, char *max_chutes, char *palavra){
     int erros = 0;
@@ -97,4 +90,36 @@ bool acertou(char *palavra, int tentativas, char *max_chutes){
         }
     }
     return true;
+}
+int get_chute(char *max_chutes, int tentativas){
+    char chute;
+    
+    printf("De o seu chute: ");
+    scanf("%c", &chute);
+    getchar();
+    max_chutes[tentativas] = chute;
+    tentativas++;
+    return tentativas;
+}
+char *sortea_palavra(char *palavra){
+    FILE *fp;
+    int aleatorio, qntpalavras;
+
+    fp = fopen("/home/ixcsoft/Documentos/Códigos/Alura/palavras.txt", "r+");
+    if(fp==NULL){
+        printf("Não foi possível abrir o arquivo!\n");
+        exit(1);
+    }
+
+    fscanf(fp, "%d", &qntpalavras);
+
+    srand(time(NULL));
+    aleatorio = rand() % qntpalavras;
+
+    for(int i = 0; i < aleatorio; i++){
+        fscanf(fp, "%s", palavra);
+    }
+
+    fclose(fp);
+    return palavra;
 }
