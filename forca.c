@@ -11,7 +11,11 @@ bool achou_letra(char letra, int tentativas, char *max_chutes);
 bool enforcou(int tentativas, char *max_chutes, char *palavra);
 bool acertou(char *palavra, int tentativas, char *max_chutes);
 int get_chute(char *max_chutes, int tentativas);
+int qnt_erros(int tentativas, char *max_chutes, char *palavra);
 char *sortea_palavra(char *palavra);
+
+void trofeu();
+void caveira();
 
 int main(){
     char palavra[50], max_chutes[26], add;
@@ -30,10 +34,12 @@ int main(){
     printf("\n");
     if(enforcou(tentativas, max_chutes, palavra)){
         printf("Você perdeu! Tente novamente!\n");
+        caveira();
     }
     if(acertou(palavra, tentativas, max_chutes)){
         printf("Você ganhou, parabéns!\n");
         printf("A palavra era: %s\n", palavra);
+        trofeu();
     }
 
     printf("Deseja adicionar uma nova palavra no jogo (s/n)? ");
@@ -41,7 +47,8 @@ int main(){
     if(add == 's'){
         add_palavra();
     }
-
+    printf("Jogo finalizado!\n");
+    
     return 0;
 }
 
@@ -51,6 +58,18 @@ void abertura(){
     printf("*********************\n");
 }
 void forca(char *palavra, int tentativas, char *max_chutes){
+    int erros = qnt_erros(tentativas, max_chutes, palavra);
+
+    printf("  _______       \n");
+    printf(" |/      |      \n");
+    printf(" |      %c%c%c  \n", (erros>=1?'(':' '), (erros>=1?'_':' '), (erros>=1?')':' '));
+    printf(" |      %c%c%c  \n", (erros>=3?'\\':' '), (erros>=2?'|':' '), (erros>=3?'/': ' '));
+    printf(" |       %c     \n", (erros>=2?'|':' '));
+    printf(" |      %c %c   \n", (erros>=4?'/':' '), (erros>=4?'\\':' '));
+    printf(" |              \n");
+    printf("_|___           \n");
+    printf("\n");
+
     printf("\nTentativa %d!\n", tentativas);
     for(int i = 0; i < strlen(palavra); i++){
         if(achou_letra(palavra[i], tentativas, max_chutes)){
@@ -131,6 +150,16 @@ int get_chute(char *max_chutes, int tentativas){
     tentativas++;
     return tentativas;
 }
+int qnt_erros(int tentativas, char *max_chutes, char *palavra){
+    int erros = 0;
+
+    for(int i = 0; i<tentativas; i++){
+        if(!achou_letra(palavra[i],tentativas, max_chutes)){
+            erros++;
+        }
+    }
+    return erros;
+}
 char *sortea_palavra(char *palavra){
     FILE *fp;
     int aleatorio, qntpalavras;
@@ -152,4 +181,35 @@ char *sortea_palavra(char *palavra){
 
     fclose(fp);
     return palavra;
+}
+
+void trofeu(){
+    printf("       ___________      \n");
+    printf("      '._==_==_=_.'     \n");
+    printf("      .-\\:      /-.    \n");
+    printf("     | (|:.     |) |    \n");
+    printf("      '-|:.     |-'     \n");
+    printf("        \\::.    /      \n");
+    printf("         '::. .'        \n");
+    printf("           ) (          \n");
+    printf("         _.' '._        \n");
+    printf("        '-------'       \n\n");
+}
+void caveira(){
+    printf("   _______________         \n");
+    printf("  /               \\       \n"); 
+    printf(" /                 \\      \n");
+    printf("/                   \\  \n");
+    printf("|   XXXX     XXXX   |  \n");
+    printf("|   XXXX     XXXX   |     \n");
+    printf("|   XXX       XXX   |      \n");
+    printf("|                   |      \n");
+    printf("\\__      XXX      __/     \n");
+    printf("  |\\     XXX     /|       \n");
+    printf("  | |           | |        \n");
+    printf("  | I I I I I I I |        \n");
+    printf("  |  I I I I I I  |        \n");
+    printf("  \\_             _/       \n");
+    printf("    \\_         _/         \n");
+    printf("      \\_______/           \n");
 }
