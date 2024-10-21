@@ -6,6 +6,7 @@
 
 void abertura();
 void forca(char *palavra, int tentativas, char *max_chutes);
+void add_palavra();
 bool achou_letra(char letra, int tentativas, char *max_chutes);
 bool enforcou(int tentativas, char *max_chutes, char *palavra);
 bool acertou(char *palavra, int tentativas, char *max_chutes);
@@ -13,7 +14,7 @@ int get_chute(char *max_chutes, int tentativas);
 char *sortea_palavra(char *palavra);
 
 int main(){
-    char palavra[50], max_chutes[26];
+    char palavra[50], max_chutes[26], add;
     int tentativas = 0;
 
     sortea_palavra(palavra);
@@ -35,6 +36,12 @@ int main(){
         printf("A palavra era: %s\n", palavra);
     }
 
+    printf("Deseja adicionar uma nova palavra no jogo (s/n)? ");
+    scanf("%c", &add);
+    if(add == 's'){
+        add_palavra();
+    }
+
     return 0;
 }
 
@@ -52,6 +59,29 @@ void forca(char *palavra, int tentativas, char *max_chutes){
             printf("_ ");
         }
     }
+}
+void add_palavra(){
+    FILE *f;
+    int qnt;
+    char nova_palavra[50];
+
+    f = fopen("/home/ixcsoft/Documentos/Códigos/Alura/palavras.txt", "r+");
+    if(f == NULL){
+        printf("Não foi possível abrir o arquivo!\n");
+        exit(1);
+    }
+
+    fscanf(f, "%d", &qnt);
+    qnt++;
+    fseek(f, 0, SEEK_SET);
+    fprintf(f, "%d", qnt);
+
+    fseek(f, 0, SEEK_END);
+    printf("Nova palavra: ");
+    scanf("%s", nova_palavra);
+    fprintf(f, "\n%s", nova_palavra);
+
+    fclose(f);
 }
 bool achou_letra(char letra, int tentativas, char *max_chutes){
     bool achou = false;
@@ -105,7 +135,7 @@ char *sortea_palavra(char *palavra){
     FILE *fp;
     int aleatorio, qntpalavras;
 
-    fp = fopen("/home/ixcsoft/Documentos/Códigos/Alura/palavras.txt", "r+");
+    fp = fopen("/home/ixcsoft/Documentos/Códigos/Alura/palavras.txt", "r");
     if(fp==NULL){
         printf("Não foi possível abrir o arquivo!\n");
         exit(1);
