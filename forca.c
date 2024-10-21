@@ -23,6 +23,7 @@ int main(){
         tentativas = get_chute(max_chutes, tentativas);
     }while(!acertou(palavra, tentativas, max_chutes) && !enforcou(tentativas, max_chutes, palavra));
 
+    printf("\n");
     if(enforcou(tentativas, max_chutes, palavra)){
         printf("Você perdeu! Tente novamente!\n");
     }
@@ -74,13 +75,7 @@ bool enforcou(int tentativas, char *max_chutes, char *palavra){
     char errados[5] = {NULL,NULL,NULL,NULL,NULL};
 
     for(int i = 0; i<tentativas; i++){
-        bool existe = false;
-        for(int j = 0; j < strlen(palavra); j++){
-            if(max_chutes[i]==palavra[j]){
-                existe = true;
-                break;
-            }
-        }
+        bool existe = achou_letra(palavra[i], tentativas, max_chutes);
         if(!existe){
             errados[erros] = max_chutes[i];
             erros++;
