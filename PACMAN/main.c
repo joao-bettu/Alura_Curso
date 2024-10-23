@@ -2,7 +2,8 @@
 #include <stdlib.h>
 
 int main(){
-    char mapa[5][10+1]; //Matriz de 5x10
+    int linhas, colunas;
+    char** mapa; //Matriz
     FILE *f;
 
     f = fopen("/home/ixcsoft/Documentos/Códigos/Alura/PACMAN/mapa.txt", "r");
@@ -11,12 +12,14 @@ int main(){
         exit(1);
     }
 
-    for(int i = 0; i <= 4; i++){
-        fscanf(f, "%s", mapa[i]);
+    fscanf(f, "%d %d", &linhas, &colunas);
+    printf("Linhas: %d\nColunas: %d\n", linhas, colunas);
+
+    mapa = malloc(sizeof(char*) * linhas);
+    for(int i = 0; i < colunas; i++){
+        mapa[i] = malloc(sizeof(char) * colunas);
     }
-    for(int j = 0; j <= 4; j++){
-        printf("%s\n", mapa[j]);
-    }
+    
 
     fclose(f);
     return 0;
